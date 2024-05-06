@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezerwacja Stolika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #555;
+        }
+        a {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #555;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+
+            background-color: #555;
+
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista Rezerwacji Stolików</h1>
+
+    <table>
+        <tr>
+            <th>ID ZAMÓWIENIA</th>
+            <th>OPIS ZAMÓWIENIA</th>
+            <th>KTO ZAMÓWIŁ</th>
+            <th>ANULUJ REZERWACJE</th>
+        </tr>
+        {% for rezerwacja in object_list %}
+        <!-- Display Objects -->
+        <tr>
+            <td>{{ rezerwacja.id }}</td>
+            <td>{{ rezerwacja.stolik }}</td>
+            <td>{{ rezerwacja.user }}</td>
+            <td>
+                <form action="{% url 'unreserve' rezerwacja.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Anuluj rezerwacje">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'index' %}">STRONA GŁÓWNA</a>
+{% if user.is_authenticated %}
+        <p>Zalogowany użytkownik: {{ user.username }}</p>
+    {% else %}
+        <p>Nie jesteś zalogowany.</p>
+    {% endif %}
+</body>
+</html>

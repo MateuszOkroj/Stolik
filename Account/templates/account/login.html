@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container-fluid {
+            padding: 20px;
+        }
+
+        .card-signin {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-signin input[type="email"],
+        .form-signin input[type="password"] {
+            width: 90%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-signin input[type="email"]:focus,
+        .form-signin input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .form-signin button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-signin button:hover {
+            background-color: #555;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+
+        .link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="card card-signin">
+            <div class="card-body">
+                <form class="form-signin" method="post">
+                    {% csrf_token %}
+                    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Adres email" required autofocus>
+
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Hasło" required>
+
+                    {% for field in login_form %}
+                    {% for error in field.errors %}
+                    <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+
+                    {% if login_form.non_field_errors %}
+                    <div class="error-message">
+                        <p>{{ login_form.non_field_errors }}</p>
+                    </div>
+                    {% endif %}
+
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Zaloguj</button>
+                    <a class="link" href="{% url 'index' %}">Powrót do strony głównej</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

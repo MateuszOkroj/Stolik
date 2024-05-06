@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezerwacja Stolika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+            color: red;
+        }
+        a {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>INFORMACJE O STOLIKU</h1>
+    <ul>
+        <li>ID: {{ object.id }}</li>
+        <li>ILOŚĆ MIEJSC: {{ object.ilosc }}</li>
+        <li>DZIEŃ: {{ object.dzien }}</li>
+        <li>GODZINA: {{ object.godzina }}</li>
+        <li>RESTAURACJA: {{ object.restauracja }}</li>
+    </ul>
+
+    {% if not object.is_reserved %}
+        <form action="{% url 'reserve' stolik.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Zarezerwuj">
+        </form>
+        <a href="{% url 'index' %}">STRONA GŁÓWNA</a>
+        {% if user.is_authenticated %}
+            <p>Zalogowany użytkownik: {{ user.username }}</p>
+        {% else %}
+            <p>Nie jesteś zalogowany.</p>
+        {% endif %}
+
+    {% else %}
+        <h3>Stolik zarezerwowany</h3>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezerwacja Stolika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .login-options {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .filter-options {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .form-container {
+            text-align: left;
+            margin: 20px auto;
+        }
+        .fieldWrapper {
+            margin: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+        .btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #555;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #555;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #555;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        a {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #555;
+        }
+        p {
+            text-align: left;
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Rezerwacja Stolika</h1>
+        <div class="login-options">
+            <a class="btn" href="{% url 'register' %}">Zarejestruj</a>
+            <a class="btn" href="{% url 'logout' %}">Wyloguj</a>
+            <a class="btn" href="{% url 'login' %}">Zaloguj</a>
+        </div>
+        <div class="filter-options">
+            <!-- Tutaj dodaj opcje filtrowania -->
+        </div>
+    </div>
+    <div class="form-container">
+        <form action="{% url 'index' %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            {% endfor %}
+            <input type="submit" value="SZUKAJ">
+        </form>
+    </div>
+    <table>
+        <tr>
+            <th>RESTAURACJA</th>
+            <th>ILOŚĆ MIEJSC</th>
+            <th>LOKALIZACJA</th>
+            <th>DZIEŃ</th>
+            <th>GODZINA</th>
+            <th>ZAREZERWUJ</th>
+            <th></th>
+        </tr>
+        {% for stolik in object_list %}
+        <!-- Display Objects -->
+        <tr>
+            <td>{{ stolik.restauracja }}</td>
+            <td>{{ stolik.ilosc }}</td>
+            <td>{{ stolik.lokalizacja }}</td>
+            <td>{{ stolik.dzien }}</td>
+            <td>{{ stolik.godzina }}</td>
+            <td>
+                <form action="{% url 'detail' stolik.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Zarezerwuj">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'rezerwacje' %}">Przejdź na rezerwacje</a>
+    {% if user.is_authenticated %}
+        <p>Zalogowany użytkownik: {{ user.username }}</p>
+    {% else %}
+        <p>Nie jesteś zalogowany.</p>
+    {% endif %}
+</body>
+</html>
